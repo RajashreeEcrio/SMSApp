@@ -7,12 +7,11 @@ export default defineConfig({
   server: {
     host: "0.0.0.0",
     port: 3000,
-    open: true,
     headers: {
       "cache-control": "no-cache",
     },
     hmr: {
-      host: "192.168.1.34",
+      host: "192.168.0.105",
       port: 3000,
     },
   },
