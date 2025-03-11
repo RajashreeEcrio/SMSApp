@@ -16,7 +16,7 @@ export default function ChatScreen() {
   const navigate = useNavigate();
 
   const currentUser = contacts.find(
-    (value) => value.contactNum === currentContact
+    (value) => value.contact_id === currentContact
   );
 
   // to handle message typing
@@ -75,8 +75,8 @@ export default function ChatScreen() {
               <i class="fa-solid fa-arrow-left"></i>
             </button>
             <div className="uname">
-              <h4 style={{ color: "#fff" }}>{currentUser.contactName}</h4>
-              <h6 style={{ color: "#fff" }}>{currentUser.contactNum}</h6>
+              <h4 style={{ color: "#fff" }}>{currentUser.contact_name}</h4>
+              <h6 style={{ color: "#fff" }}>{currentUser.contact_id}</h6>
             </div>
           </div>
           {chats.length > 0 && (
