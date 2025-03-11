@@ -39,7 +39,7 @@ button {
 .userDetails {
   display: flex;
   width: 40%;
-  justify-content: space-around;
+  justify-content: flex-start;
   align-items: center;
 }
 .icons {

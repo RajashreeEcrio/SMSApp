@@ -1,30 +1,57 @@
-import React, { useContext } from "react";
-import "./style.css";
+import React, { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ContactContext } from "../../Context/ContactContext";
+import "./style.css";
+import { apiURL } from "../../Constants/apiEndPoints";
+import { headers } from "../../Constants/headers";
 
 export default function Contacts() {
   const navigate = useNavigate();
-  const { contacts, setCurrentContact } = useContext(ContactContext);
+  const { contacts, setContacts, setCurrentContact } =
+    useContext(ContactContext);
 
+  // function that calls the Util server API
+  const fetchContacts = async () => {
+    const response = await fetch(apiURL.fetchContacts, {
+      method: "GET",
+      headers: headers,
+    })
+      .then((res) => res.json())
+      .catch((e) => console.log("Error fetching contacts", e));
+
+    if (response) {
+      let contactArray = response.contacts_list;
+      setContacts(contactArray);
+    } else {
+      console.log("Error displaying the contacts");
+    }
+  };
+
+  // navigate to respective screens
   const navigateTo = (path) => {
     navigate(path);
   };
 
+  // to fetch contacts on initial load
+  useEffect(() => {
+    fetchContacts();
+  }, []);
+
   return (
     <div className="contacts">
+      {/* contacts array is mapped to display list of contacts */}
       {contacts.map((contact) => (
-        <div className="contact" key={contact.contactNum}>
+        <div className="contact" key={contact.contact_id}>
           <div className="userDetails">
             <i class="fa-solid fa-circle-user profile"></i>
-            <h6 className="uname">{contact.contactName}</h6>
+            <h6 className="uname">{contact.contact_name}</h6>
           </div>
 
           <div className="icons">
             <button
               className="chatBtn"
               onClick={() => {
-                setCurrentContact(contact.contactNum);
+                setCurrentContact(contact.contact_id);
                 navigateTo("/chatscreen");
               }}
             >
