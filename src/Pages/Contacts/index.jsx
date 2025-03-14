@@ -2,8 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ContactContext } from "../../Context/ContactContext";
 import { apiURL } from "../../Constants/apiEndPoints";
-import { headers } from "../../Constants/headers";
 import Spinner from "../../Components/Spinner";
+import { useHeaders } from "../../Constants/headers";
 import "./style.css";
 
 export default function Contacts() {
@@ -11,6 +11,7 @@ export default function Contacts() {
   const navigate = useNavigate();
   const { contacts, setContacts, setCurrentContact } =
     useContext(ContactContext);
+  const headers = useHeaders();
 
   // function that calls the Util server API
   const fetchContacts = async () => {
@@ -23,6 +24,11 @@ export default function Contacts() {
 
     if (response) {
       let contactArray = response.contacts_list;
+      contactArray.sort((a,b) =>
+        a.contact_name.localeCompare(b.contact_name)
+      );
+      console.log(contactArray);
+      
       setContacts(contactArray);
     } else {
       console.log("Error displaying the contacts");
