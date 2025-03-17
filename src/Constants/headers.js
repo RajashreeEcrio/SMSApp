@@ -11,7 +11,7 @@ export const convertToBase64 = (key, value) => {
 export const useHeaders = () => {
   const { phoneNum, password } = useContext(UserDataContext);
   return {
-    "Authorization": `Basic ${convertToBase64("+919952528424", "ecrio@123")}`,
+    "Authorization": `Basic ${convertToBase64(phoneNum,password)}`,
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": "*",
   };
