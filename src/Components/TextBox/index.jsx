@@ -5,6 +5,7 @@ export default function TextBox({
   maxLength,
   placeholder,
   className,
+  id,
   onChange,
   ref,
   type,
@@ -14,11 +15,12 @@ export default function TextBox({
       <input
         type={type !== "" ? type : "text"}
         className={className}
+        id={id}
         value={msgValue}
         maxLength={maxLength ? maxLength : -1}
         placeholder={placeholder}
         onChange={onChange}
-        tabIndex="0"
+        tabIndex="1"
         ref={ref}
       />
     </>

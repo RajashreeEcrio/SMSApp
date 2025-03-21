@@ -37,6 +37,9 @@
 .loginInput::placeholder {
   color: #ddd;
 }
+.loginInput:focus{
+  border-bottom: 2.5px solid #bbbccb;
+}
 .loginBtn {
   text-transform: uppercase;
   background-color: rgb(56, 211, 195);
@@ -48,6 +51,9 @@
   left: 50%;
   transform: translate(-50%);
 }
+.loginBtn:focus{
+  box-shadow: 0px 0px 9px rgb(0, 255, 234);
+}
 .btnwrapper{
     position: relative;
 }
@@ -56,4 +62,9 @@
     right: 5%;
     top: 4vh;
     color: #eee;
+    border-radius: 50%;
+}
+.iconbtn:focus{
+  box-shadow: 0px 0px 6px #fff;
+  background-color: #dddddd73;
 }

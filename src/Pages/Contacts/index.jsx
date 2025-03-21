@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { ContactContext } from "../../Context/ContactContext";
 import { apiURL } from "../../Constants/apiEndPoints";
@@ -13,50 +13,85 @@ export default function Contacts() {
     useContext(ContactContext);
   const headers = useHeaders();
 
-  // function that calls the Util server API
+  // Function to fetch contacts
   const fetchContacts = async () => {
-    const response = await fetch(apiURL.fetchContacts, {
-      method: "GET",
-      headers: headers,
-    })
-      .then((res) => res.json())
-      .catch((e) => console.log("Error fetching contacts", e));
+    setLoading(true);
+    try {
+      const response = await fetch(apiURL.fetchContacts, {
+        method: "GET",
+        headers: headers,
+      }).then((res) => res.json());
 
-    if (response) {
-      let contactArray = response.contacts_list;
-      contactArray.sort((a,b) =>
-        a.contact_name.localeCompare(b.contact_name)
-      );
-      console.log(contactArray);
-      
-      setContacts(contactArray);
-    } else {
-      console.log("Error displaying the contacts");
+      if (response) {
+        let contactArray = response.contacts_list;
+        contactArray.sort((a, b) => a.contact_name.localeCompare(b.contact_name));
+        setContacts(contactArray);
+      } else {
+        console.log("Error displaying the contacts");
+      }
+    } catch (e) {
+      console.log("Error fetching contacts", e);
     }
     setLoading(false);
   };
 
-  // navigate to respective screens
-  const navigateTo = (path) => {
-    navigate(path);
+  // Function to handle navigation
+  const nav = (moveIndex) => {
+    const items = document.querySelectorAll(".contact");
+    const currentIndex = [...items].indexOf(document.activeElement);
+    let nextIndex = currentIndex + moveIndex;
+
+    // Wrap around navigation
+    if (nextIndex < 0) nextIndex = items.length - 1;
+    if (nextIndex >= items.length) nextIndex = 0;
+
+    items[nextIndex].focus();
   };
 
-  // to fetch contacts on initial load
-  useEffect(() => {
-    fetchContacts();
-    setLoading(true);
+  // Keydown event handler
+  const handleKeyDown = useCallback((e) => {
+    console.log("e==========>", e);
+    console.log("e.key=>", e.key);
+
+    switch (e.key) {
+      case "ArrowUp":
+        nav(-1);
+        break;
+      case "ArrowDown":
+        nav(1);
+        break;
+      case "ArrowLeft":
+        nav(-1);
+        break;
+      case "ArrowRight":
+        nav(-1);
+        break;
+    }
   }, []);
+
+  // useEffect to add and remove event listener
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyDown);
+    fetchContacts();
+    
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [handleKeyDown]);
 
   return (
     <div className="contacts">
-      {/* contacts array is mapped to display list of contacts */}
       {loading ? (
         <Spinner />
       ) : (
-        contacts.map((contact) => (
-          <div className="contact" key={contact.contact_id}>
+        contacts.map((contact, index) => (
+          <div
+            className="contact"
+            key={contact.contact_id}
+            tabIndex={index === 0 ? 0 : -1}  // ✅ First item focusable
+          >
             <div className="userDetails">
-              <i class="fa-solid fa-circle-user profile"></i>
+              <i className="fa-solid fa-circle-user profile"></i>
               <h6 className="uname">{contact.contact_name}</h6>
             </div>
 
@@ -65,7 +100,7 @@ export default function Contacts() {
                 className="chatBtn"
                 onClick={() => {
                   setCurrentContact(contact.contact_id);
-                  navigateTo("/chatscreen");
+                  navigate("/chatscreen");
                 }}
               >
                 <i className="fa-solid fa-message"></i>

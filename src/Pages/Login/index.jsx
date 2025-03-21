@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import logo from "../../assets/ecrio_red_logo.png";
 import TextBox from "../../Components/TextBox";
 import Spinner from "../../Components/Spinner";
@@ -11,6 +11,8 @@ export default function Login() {
   const [port, setPort] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPwd, setShowPwd] = useState(false);
+  const [currentId, setCurrentId] = useState("0");
+  const cId=useRef("0");
 
   const {
     phoneNum,
@@ -50,6 +52,36 @@ export default function Login() {
     }, 2000);
   };
 
+  const inputFocus = (id) => {
+    let inputRef = document.getElementById(id);
+    inputRef.focus();
+    console.log("inputFocus");
+  };
+
+  const handleKeyDown = (e) => {
+    console.log("I'm called");
+    
+    if (e.key === "ArrowDown") {
+      let newId=`${parseInt(cId.current)+1}`;
+      cId.current=newId;
+      inputFocus(newId);
+      console.log("newId=======>",newId);
+      
+    } else if (e.key === "ArrowUp") {
+      let newId=`${parseInt(cId.current)-1}`;
+      cId.current=newId;
+      inputFocus(newId);
+      console.log("newId=======>",newId);
+
+    }
+  };
+
+  window.addEventListener("keydown", handleKeyDown);
+
+  useEffect(() => {
+    inputFocus(cId.current);
+  }, []);
+
   return (
     <div className="loginBackground">
       {loading ? (
@@ -58,7 +90,6 @@ export default function Login() {
         <div className="wrapper">
           <img src={logo} alt="" className="logo" />
           <div className="inputFields">
-
             {/* UserName */}
             <TextBox
               msgValue={uname}
@@ -67,6 +98,7 @@ export default function Login() {
                 setUname(e.target.value);
               }}
               className="loginInput"
+              id={"0"}
             />
 
             {/* Password */}
@@ -79,18 +111,20 @@ export default function Login() {
                   setPassword(e.target.value);
                 }}
                 className="loginInput"
+                id={"1"}
               />
               <button
                 type="button"
                 className="iconbtn"
+                id="2"
                 onClick={() => {
                   setShowPwd(!showPwd);
                 }}
               >
                 {showPwd ? (
-                  <i class="fa-solid fa-eye-slash"></i>
+                  <i className="fa-solid fa-eye-slash"></i>
                 ) : (
-                  <i class="fa-solid fa-eye"></i>
+                  <i className="fa-solid fa-eye"></i>
                 )}
               </button>
             </div>
@@ -104,6 +138,7 @@ export default function Login() {
                 setPhoneNum(e.target.value);
               }}
               className="loginInput"
+              id={"3"}
             />
 
             {/* Server IP address */}
@@ -114,6 +149,7 @@ export default function Login() {
                 setServerIP(e.target.value);
               }}
               className="loginInput"
+              id={"4"}
             />
 
             {/* Port Address */}
@@ -124,9 +160,10 @@ export default function Login() {
                 setPort(e.target.value);
               }}
               className="loginInput"
+              id={"5"}
             />
           </div>
-          <button type="button" className="loginBtn" onClick={validate}>
+          <button type="button" className="loginBtn" id="6" onClick={validate}>
             Login
           </button>
         </div>

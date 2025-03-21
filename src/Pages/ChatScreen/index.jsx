@@ -72,7 +72,7 @@ export default function ChatScreen() {
         <div className="header">
           <div className="leftbox">
             <button className="back" tabIndex="0" onClick={() => navigate(-1)}>
-              <i class="fa-solid fa-arrow-left"></i>
+              <i className="fa-solid fa-arrow-left"></i>
             </button>
             <div className="uname">
               <h4 style={{ color: "#fff" }}>{currentUser.contact_name}</h4>
@@ -81,7 +81,7 @@ export default function ChatScreen() {
           </div>
           {chats.length > 0 && (
             <button className="del" onClick={delMessages}>
-              <i class="fa-solid fa-trash"></i>
+              <i className="fa-solid fa-trash"></i>
             </button>
           )}
         </div>
@@ -112,9 +112,9 @@ export default function ChatScreen() {
             className="sendBtn"
             icon={
               msg.trim() === "" ? (
-                <i class="fa-solid fa-microphone"></i>
+                <i className="fa-solid fa-microphone"></i>
               ) : (
-                <i class="fa-solid fa-paper-plane"></i>
+                <i className="fa-solid fa-paper-plane"></i>
               )
             }
           />
